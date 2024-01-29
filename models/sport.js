@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class Sport extends Model {
     static associate(models) {
       // Define association with Session model
-      Sport.hasMany(models.Session, { foreignKey: 'sportId', as: 'sessions' });
+     Sport.hasMany(models.Session, { foreignKey: 'sportId', as: 'sessions' });
     }
     static async createSport(adminId, { name }) {
       try {
