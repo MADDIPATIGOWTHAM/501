@@ -1,0 +1,87 @@
+<!-- index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+        }
+
+        section {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 80vh;
+        }
+
+        .cta-box {
+            background-color: white;
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .cta-box h2 {
+            margin-bottom: 1em;
+            color: #333;
+        }
+
+        .cta-button {
+            display: block;
+            width: 100%;
+            padding: 1em;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #555;
+        }
+        a{
+            padding-left: 20px;
+            margin-left: -15px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Welcome to our Professional Website</h1>
+    </header>
+
+    <section>
+        <div class="cta-box">
+            <h2>Sign Up</h2>
+            <p>Create an account to access premium features.</p>
+            <a href="/signup" class="cta-button">Sign Up</a>
+        </div>
+
+        <div class="cta-box">
+            <h2>Sign In</h2>
+            <p>Already have an account? Sign in here.</p>
+            <a href="/login" class="cta-button">Sign In</a>
+        </div>
+    </section>
+</body>
+
+</html>

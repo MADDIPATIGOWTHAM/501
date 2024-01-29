@@ -1,0 +1,358 @@
+<!-- playerDashboard.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Player Dashboard</title>
+    <style>
+      /* styles.css */
+
+/* Resetting margin and padding globally */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #746b77;
+    color: #333;
+}
+
+/* Container Styles */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+/* Header Styles */
+header {
+    background-color: #2b0303;
+    color: #fff;
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 20;
+    margin-bottom: 20px;
+   
+}
+
+header p {
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+/* Main Section Styles */
+main {
+    margin-top: 60px; /* Adjusted margin top to create space between header and main content */
+    padding: 20px;
+}
+
+/* Section Styles */
+section {
+    margin-bottom: 40px;
+}
+
+/* Lists Styles */
+ul {
+    list-style: none;
+    padding-left: 20px;
+    color: #cc0d0d;
+}
+
+/* Hover Effect for Text */
+.hover:text-red-500 {
+    transition: text-shadow .2s ease-in-out;
+    color: rgb(171, 106, 21);
+}
+
+/* Card Styles */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styles */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #004080; /* Dark Blue */
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #003366; /* Slightly darker shade */
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: #ddd2d2;
+    padding: 1rem 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    margin-top:60px;
+}
+.body{
+    padding-top:200px;
+    padding-bottom: 200px;
+}
+.sessions_own{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 20px; /* Adjust the gap between items */
+            margin: 20px;  
+}
+.space-y-4{
+    background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: rgb(10, 11, 11);
+}
+button {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #000000;
+            background-color:olive; /* Dark Blue */
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #00060b; /* Slightly darker shade */
+            color:olive;
+        }
+    </style> <!-- Link to external CSS file -->
+    <script>
+        function deleteSession(id) {
+            fetch(`/delete-session/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((res) => {
+                if (res.ok) {
+                    window.location.reload();
+                }
+            })
+            .catch((err) => console.error(err));
+        }
+
+    </script>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-blue-500 text-white py-4 fixed w-full top-0 z-20">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <div>
+                    <p>Welcome..! <%= player.firstName + " " + player.lastName %></p>
+                    <p>Mail: <%= player.email %></p>
+                </div>
+            </div>
+            <div class="text-center flex-grow">
+                <h1 class="text-2xl font-semibold">Welcome to Player Dashboard</h1>
+            </div>
+            <ul class="flex items-center space-x-4">
+                <li><a href="/signout" class="hover:text-red-500" style="padding-left: 1200px;color: red;">Sign Out</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="body">
+        <main class="container mx-auto mt-20 pl-4 pr-8">
+            <section id="manage-sports-section" class="h-full">
+                <h2 class="text-2xl font-semibold mb-4">Your sessions</h2>
+                <!-- views/playerSessionsList.ejs -->
+          <% const playerSessions = sessions.filter(session => session.creator === player.email); %>
+          
+          <% if (playerSessions && playerSessions.length > 0) { %>
+          <h2 class="sessions_own">Sessions Created by <%= "Mr. " + player.firstName + " " + player.lastName %></h2>
+          <ul class="space-y-4">
+          <% playerSessions.forEach(session => { %>
+            <li class="border p-4 rounded shadow-md">
+                <h3 class="text-lg font-semibold mb-2">Session ID: <%= session.id %></h3>
+                <p><strong>Sport ID:</strong> <%= session.sportId %></p>
+                <p><strong>Date of event:</strong> <%= session.date %></p>
+                <p><strong>Time of event:</strong> <%= session.time %></p>
+                <p><strong>Venue:</strong> <%= session.venue %></p>
+                <p><strong>Remaining:</strong> <%= session.team_size %></p>
+                <a href="#!" onclick="deleteSession('<%= session.id %>')" class="text-red-600 hover:underline">Delete Session</a>
+            </li>
+          <% }); %>
+          </ul>
+          <% } else { %>
+          <p class="text-gray-500">No sessions created by you, create to see.</p>
+          <% } %>
+          <br>
+
+          <!-- sessions joined by the logged-in player -->
+          <h2 class="text-2xl font-semibold mb-4">Sessions Joined by <%= "Mr. " + player.firstName + " " + player.lastName %></h2>
+          <br>
+          <% const filteredJoinedSessions = joinedSessions.filter(session => session.playerId === player.id); %>
+          <% if (filteredJoinedSessions && filteredJoinedSessions.length > 0) { %>
+          <ul class="space-y-4">
+          <% filteredJoinedSessions.forEach(session => { %>
+            <li class="border p-4 rounded shadow-md">
+                <h3 class="text-lg font-semibold mb-2">Join-ID: <%= session.id %></h3>
+                <p><strong>Session ID:</strong> <%= session.sessionId %></p>
+                <% const sportDetails = sports.find(sport => sport.id === session.sportId); %>
+
+                
+                <p><strong>Sport ID:</strong> <%= sportDetails ? sportDetails.id : 'N/A' %></p>
+          
+                <% const sessionDetails = sessions.find(s => s.id === session.sessionId); %>
+                <p><strong>Date:</strong> <%= sessionDetails ? sessionDetails.date : 'N/A' %></p>
+                <p><strong>Time:</strong> <%= sessionDetails ? sessionDetails.time : 'N/A' %></p>
+                <p><strong>Vacency:</strong> <%= sessionDetails ? sessionDetails.team_size : 'N/A' %></p>
+            </li>
+          <% }); %>
+          </ul>
+          <% } else { %>
+          <p class="text-gray-500">No sessions joined by you, join some sessions!</p>
+          <% } %>
+          
+          
+          <br>
+          <!-- all sports and sessions -->
+          <h2 class="text-2xl font-semibold mb-4">All Sports-Sessions</h2>
+          <br>
+          <% if (sports.length > 0) { %>
+          <ul class="space-y-4">
+          <% sports.forEach(sport => { %>
+            <li class="border p-4 rounded shadow-md">
+                <h3 class="text-lg font-semibold mb-2">Sport Name: <%= sport.name %></h3>
+                <p><strong>Sport ID:</strong> <%= sport.id %></p>
+                <p><strong>Admin ID:</strong> <%= sport.adminId %></p>
+          
+                <!-- Fetch and display sessions for this sport -->
+                <p><strong>Available Sessions : </strong></p>
+                <% const sportSessions = sessions.filter(session => session.sportId === sport.id); %>
+                <% if (sportSessions && sportSessions.length > 0) { %>
+                    <ul class="list-disc pl-4">
+                        <% sportSessions.forEach(session => { %>
+                            <li>
+                                <strong>Session ID :</strong> <%= session.id %><br>
+                                <strong>Creator :</strong> <%= session.creator %><br>
+                                <strong>Date :</strong> <%= session.date %><br>
+                                <strong>Time :</strong> <%= session.time %><br>
+                                <strong>Venue :</strong> <%= session.venue %><br>
+                                <strong>Team-Size :</strong> <%= session.team_size %><br>
+                            </li>
+                            <form action="/join" method="post" style="display: inline;">
+                                <input type="hidden" name="playerId" value="<%= player.id %>">
+                                <input type="hidden" name="sessionId" value="<%= session.id %>">
+                                <input type="hidden" name="team_size" value="<%= session.team_size %>">
+                                <button type="submit" class="text-green-600 hover:underline">To-Join</button>
+                            </form>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p class="text-gray-500">No sessions available for this sport.</p>
+                <% } %>
+          
+            </li>
+          <% }); %>
+          </ul>
+          <% } else { %>
+          <p class="text-gray-500">No sports available.</p>
+          <% } %>
+          
+            
+          
+            <button id="toggleFormSession" class="bg-blue-500 text-white p-2 rounded mt-4">Add Session</button>
+            <section>
+                <form id="createSessionForm" action="/create-session" style="display: none;" method="post" class="h-full mx-auto bg-white p-8 mt-4 rounded shadow-md slide-down">
+                    <div class="mb-4">
+                        <label for="sportId">Sport:</label>
+                        <select id="sportId" name="sportId" required>
+                        <% sports.forEach(sport => { %>
+                            <option value="<%= sport.id %>"><%= sport.name %></option>
+                        <% }); %>
+                        </select>
+                    </div>
+                    <input type="hidden" name="creator" value="<%= player.email %>">
+          
+                    <div class="mb-4">
+                        <label for="date" class="block text-gray-700 text-sm font-bold mb-2">Date:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+          
+                    <div class="mb-4">
+                        <label for="time" class="block text-gray-700 text-sm font-bold mb-2">Time:</label>
+                        <input type="time" id="time" name="time" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="venue" class="block text-gray-700 text-sm font-bold mb-2">Venue:</label>
+                        <input type="text" id="venue" name="venue" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="team_size" class="block text-gray-700 text-sm font-bold mb-2">Team-Size :</label>
+                        <input type="text" name="team_size" required>
+                    </div>
+                    <br>
+                    <div class="mb-6">
+                        <br>
+                        <button type="submit" class="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">Create Session</button>
+                    </div>
+                    
+                </form>
+            </section>
+            
+          </main>
+
+
+    </div>
+    <footer class="bg-gray-800 text-white py-4 mt-8 z-20">
+        <div class="container mx-auto flex items-center justify-center">
+            <p>&copy; 2024 player Dashboard</p>
+            <p style="opacity: 0.5;padding-left: 1000px;">Created By: Gowtham Maddipati</p>
+            <p style="opacity: 0.5;padding-left: 1000px;">Contact:gowthammaddipati94@gmail.com</p>
+        </div>
+    </footer>
+
+    <script>
+        const toggleFormSessionButton = document.getElementById('toggleFormSession');
+        const createSessionForm = document.getElementById('createSessionForm');
+
+        toggleFormSessionButton.addEventListener('click', function () {
+        createSessionForm.style.display = createSessionForm.style.display === 'block' ? 'none' : 'block';
+        createSessionForm.classList.toggle('slide-down');
+
+        // Smooth scroll to the form
+        if (createSessionForm.style.display === 'block') {
+            createSessionForm.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+    </script>
+</body>
+</html>
