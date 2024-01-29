@@ -280,6 +280,7 @@ app.get("/admin", connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
       const sportSessions = await Session.findAll({
         where: { sportId: sport.id },
       });
+       console.log(`SQL Query for sportId ${sport.id}:`, sportSessions.toString());
       sessions.push(...sportSessions);
     }
 
