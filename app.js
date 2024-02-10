@@ -103,7 +103,7 @@ app.get("/", (request, response) => {
 });
 
 app.get("/signup", (request, response) => {
-  response.render("signup_page");
+  response.render("signup");
 });
 
 app.get("/login", (request, response) => {
